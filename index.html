@@ -66,7 +66,7 @@
       <h1>Mike's Gift List</h1>
       <div class="intro">
         <p>These are all just suggestions of things I'd want. Most of them come in multiple colors and I'm good with any color. I mostly wear black, navy, grey and white, but yk.</p>
-        <p><b>Brands I like:</b> lululemon, Vuori, Peter Millar, johnnie-O, Charles Tyrwhitt, Buck Mason, Beckett Simonon, SKIMS and Nike.</p>
+        <p><b>Brands I like:</b> lululemon, Vuori, Peter Millar, johnnie-O, Charles Tyrwhitt, Buck Mason, Beckett Simonon, Oliver Cabell, Rhone, SKIMS and Nike.</p>
         <p>I don't expect anything, yk.</p>
       </div>
       <div class="sub">Tap <b>Shop</b> to open the product page.</div>
@@ -83,6 +83,9 @@
 <script>
 
 const ITEMS = [
+  {id:"oc_low1", who:"top", group:"list", brand:"Oliver Cabell", name:"Low 1 Sneaker", price:179.99,
+   size:"Pretty much any color · whole sizes only, pick 9 or 10", note:"Most colors are $180 to $225.",
+   img:"img/oc_low1.webp", url:"https://olivercabell.com/collections/low-1"},
   // ---- From the list ----
   {id:"skims", who:"mom", group:"list", brand:"SKIMS", name:"SKIMS Cotton Rib Men's 5\" Boxer Brief", price:24,
    size:"Size M · Onyx", note:"Soft mid-weight cotton boxer brief. Also sold in 3-packs.",
@@ -157,6 +160,7 @@ const ITEMS = [
 ];
 
 const SECTIONS = [
+  {w:"top", title:"Top pick", sub:"Either one can get these"},
   {w:"dad", title:"Dad", tot:1},
   {w:"mom", title:"Mom", tot:1},
   {w:"extra", title:"Optional coffee extras", sub:"Not on my list and not needed. Anyone can grab these if they want."},
