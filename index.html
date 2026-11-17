@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mike's Gift List</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f6f3ee; --card:#fffdf9; --ink:#1f1d1a; --muted:#6f685e; --line:#e6dfd4;
+    --accent:#1f3a2e; --accent-soft:#e3ece6; --gold:#b8873b; --got:#9aa59d;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:15px;line-height:1.45}
+  .wrap{max-width:1120px;margin:0 auto;padding:36px 20px 80px}
+  header{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-end;justify-content:space-between;margin-bottom:22px}
+  h1{font-family:Fraunces,Georgia,serif;font-weight:700;font-size:40px;letter-spacing:-.5px;margin:0}
+  .intro{margin-top:14px;max-width:620px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;font-size:15px;line-height:1.5}
+  .intro p{margin:0 0 8px}.intro p:last-child{margin:0}
+  .sub{color:var(--muted);margin-top:6px;max-width:560px}
+  .tally{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;min-width:250px}
+  .tally .row{display:flex;justify-content:space-between;gap:20px;font-size:14px;color:var(--muted)}
+  .tally .big{font-family:Fraunces,serif;font-size:26px;color:var(--ink);font-weight:700}
+  .bar{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0 14px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .chip{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:999px;font:500 14px Inter,sans-serif;cursor:pointer}
+  .chip.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .search{margin-left:auto;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:8px 14px;font:14px Inter,sans-serif;min-width:200px}
+  .section{margin:26px 0 12px;display:flex;align-items:baseline;gap:12px}
+  .section h2{font-family:Fraunces,serif;font-size:24px;margin:0}
+  .section span{color:var(--muted);font-size:14px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:transform .15s, box-shadow .15s, opacity .2s}
+  .card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(31,29,26,.08)}
+  .card.got{opacity:.55}
+  .card.got .name{text-decoration:line-through}
+  .img{height:230px;background:#fff;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--line);position:relative}
+  .img > img{width:100%;height:100%;object-fit:contain}
+  .img .swatches{position:absolute;bottom:8px;left:8px;display:flex;gap:6px}
+  .img .swatches img{width:44px;height:56px;object-fit:cover;border-radius:6px;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.15);cursor:pointer}
+  .tag{position:absolute;top:10px;left:10px;font-size:11px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;padding:4px 8px;border-radius:6px;background:var(--accent-soft);color:var(--accent)}
+  .tag.sim{background:#f4e9d6;color:#7a5520}
+  .tag.cof{background:#ece4dc;color:#5b3f2a}
+  .tag.br{background:#e6e9f0;color:#2d3a55}
+  .body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+  .brand{font-size:12px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:var(--muted)}
+  .name{font-weight:600;font-size:16px}
+  .note{color:var(--muted);font-size:13.5px}
+  .size{font-size:13px;background:#f3efe8;border-radius:8px;padding:5px 9px;align-self:flex-start}
+  .foot{margin-top:auto;padding-top:10px;display:flex;align-items:center;gap:10px}
+  .price{font-family:Fraunces,serif;font-weight:700;font-size:20px}
+  .price s{font-family:Inter;font-weight:400;font-size:13px;color:var(--muted);margin-left:4px}
+  .shop{margin-left:auto;background:var(--accent);color:#fff;text-decoration:none;font-weight:600;font-size:14px;padding:9px 14px;border-radius:10px}
+  .shop:hover{background:#2c5241}
+  .check{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);cursor:pointer;user-select:none}
+  .check input{width:17px;height:17px;accent-color:var(--accent)}
+  .empty{color:var(--muted);padding:30px 0;text-align:center;display:none}
+  footer{margin-top:40px;color:var(--muted);font-size:13px}
+  @media (max-width:600px){h1{font-size:32px}.search{margin-left:0;width:100%}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Mike's Gift List</h1>
+      <div class="intro">
+        <p>These are all just suggestions of things I'd want. Most of them come in multiple colors and I'm good with any color. I mostly wear black, navy, grey and white, but yk.</p>
+        <p><b>Brands I like:</b> lululemon, Vuori, Peter Millar, johnnie-O, Charles Tyrwhitt, Buck Mason, Beckett Simonon, SKIMS and Nike.</p>
+        <p>I don't expect anything, yk.</p>
+      </div>
+      <div class="sub">Tap <b>Shop</b> to open the product page.</div>
+    </div>
+  </header>
+
+
+  <div id="out"></div>
+  
+
+  <footer>Prices were checked on Nov 15, 2026 and can change. Sizes: tops M (tees L), pants 32 waist / 30 length, shoes 9.5.</footer>
+</div>
+
+<script>
+
+const ITEMS = [
+  // ---- From the list ----
+  {id:"skims", who:"mom", group:"list", brand:"SKIMS", name:"SKIMS Cotton Rib Men's 5\" Boxer Brief", price:24,
+   size:"Size M · Onyx", note:"Soft mid-weight cotton boxer brief. Also sold in 3-packs.",
+   img:"img/skims.jpg", url:"https://skims.com/collections/skims-cotton"},
+  {id:"abc", who:"both", group:"list", brand:"lululemon", name:"ABC Classic-Fit 5 Pocket Pant 30L (Warpstreme)", price:138,
+   size:"32 waist / 30 length · any color", note:"Stretchy, wrinkle-resistant everyday pant.",
+   img:"img/abc.jpg", url:"https://shop.lululemon.com/p/abc-pant-classic-30/uapv0nu4sj"},
+  {id:"meta", who:"dad", group:"list", brand:"Vuori", name:"Vuori Meta™ Pant Athletic Slim Fit 30\"", price:138,
+   size:"Ink / 32 · Winter Grey / 32 · Dark Salt / 30", note:"Three colors in my bag. Each pair is $138.",
+   img:"img/meta_grey.jpg", swatches:["img/meta_ink.jpg","img/meta_grey.jpg","img/meta_salt.jpg"],
+   url:"https://vuoriclothing.com/products/meta-pant-athletic-slim-fit-30-winter-grey"},
+  {id:"vest", who:"dad", group:"list", brand:"Vuori", name:"Sunday Element Vest", price:98,
+   size:"Gull Grey Heather · M", note:"Pick the Gull Grey Heather color on the page.",
+   img:"img/vest.jpg", url:"https://vuoriclothing.com/products/sunday-element-vest-black"},
+  {id:"jean", who:"dad", group:"list", brand:"Vuori", name:"Vuori Vintage Jean Classic Fit 32\"", price:198,
+   size:"Light Wash Denim · 32", note:"Pick Light Wash Denim on the page.",
+   img:"img/jean.jpg", url:"https://vuoriclothing.com/products/vuori-vintage-jean-classic-fit-32-medium-wash-denim"},
+  {id:"tee", who:"mom", group:"list", brand:"Buck Mason", name:"Field-Spec Cotton Heavy Tee", price:62,
+   size:"Size L · new color", note:"I already have black and blue, so go for Heather Grey, Field Green or Heather Oat.",
+   img:"img/tee.jpg", url:"https://www.buckmason.com/products/heather-grey-field-spec-cotton-heavy-tee"},
+  {id:"henley", who:"mom", group:"list", brand:"johnnie-O", name:"Button Henley Hoodie", price:148,
+   size:"Cream · M", note:"Link opens a johnnie-O search for the hoodie.",
+   img:"img/johnnie.jpg", url:"https://www.johnnie-o.com/search?q=button%20henley%20hoodie"},
+  {id:"gld", who:"dad", group:"list", brand:"", name:"Gold Figaro Bracelet", price:null,
+   size:"Real solid gold · yellow · 5–6mm", note:"Real gold only, not plated. Shop around at a jeweler.",
+   img:"img/bracelet.jpg", url:""},
+  {id:"dean", who:"dad", group:"list", brand:"Beckett Simonon", name:"Dean Oxfords (Black + Brown)", price:249, was:370,
+   size:"Black and Brown · size 9.5 · pick sole", note:"Want both colors. Each pair is $249.",
+   img:"img/bs_dean.webp", swatches:["img/bs_dean.webp","img/bs_dean_br.webp"], url:"https://www.beckettsimonon.com/products/dean-oxford"},
+  {id:"belt", who:"dad", group:"list", brand:"Beckett Simonon", name:"Nelson Belt (Black + Brown)", price:79, was:109,
+   size:"Black and Brown · 34\" belt (fits 32\" pants)", note:"Want both colors to match the shoes. Each belt is $79.",
+   img:"img/bs_belt.webp", swatches:["img/bs_belt.webp","img/bs_belt_br.webp"], url:"https://www.beckettsimonon.com/products/nelson-belts"},
+  {id:"ct_twill", who:"dad", group:"list", brand:"Charles Tyrwhitt", name:"Non-Iron Twill Shirt", price:74.75, was:129,
+   size:"White or blue, any color · pick neck, sleeve and fit", note:"Any white or blue works. Change the color on the product page.",
+   img:"img/ct_twill.webp", url:"https://www.charlestyrwhitt.com/us/non-iron-twill-shirt---white/FON0409WHT.html"},
+  {id:"vomero", who:"mom", group:"list", brand:"Nike", name:"Vomero Plus Road Running Shoes", price:180,
+   size:"White/Dark Smoke Grey · size 9.5", note:"Max-cushion daily running shoe.",
+   img:"img/nk_vomero.webp", url:"https://www.nike.com/t/vomero-plus-mens-road-running-shoes-5npsVBwT/HV8150-101"},
+  {id:"lebron10", who:"dad", group:"list", brand:"Nike (on GOAT)", name:"LeBron 10 'Miami Dolphins'", price:165,
+   size:"Teal/orange · size 9.5", note:"2013 release, sold on GOAT. Price is for size 9.5 and changes often.",
+   img:"img/lebron10.webp", url:"https://www.goat.com/sneakers/lebron-10-miami-dolphins-541100-302"},
+  {id:"espresso", who:"mom", group:"list", brand:"CASABREWS", name:"CM5418 Compact Espresso Machine", price:139.99,
+   size:"Stainless steel", note:"20-bar pump with milk-frothing steam wand. Takes 51mm accessories.",
+   img:"img/casabrews.jpg", url:"https://www.casabrews.com/products/casabrews-20-bar-professional-compact-size-espresso-machine"},
+
+  // ---- Coffee setup (grinder + "packer thing") ----
+  {id:"tornado", who:"extra", group:"coffee", brand:"CASABREWS", name:"Tornado Basic Conical Burr Grinder", price:99.99,
+   size:"Bean grinder", note:"Matches the espresso machine and keeps the cost down.",
+   img:"img/grinder.jpg", url:"https://www.casabrews.com/collections/frontpage/products/casabrews-grinder-tornado-basic"},
+  {id:"encore", who:"extra", group:"coffee", brand:"Baratza", name:"Encore ESP Coffee & Espresso Grinder", price:199.95,
+   size:"Bean grinder · upgrade", note:"Step-up grinder instead of the Tornado, built for espresso-fine grinding.",
+   img:"img/baratza.jpg", url:"https://www.wholelattelove.com/products/baratza-encore-esp-coffee-and-espresso-grinder-black"},
+  {id:"tamper", who:"extra", group:"coffee", brand:"Normcore", name:"Spring-Loaded Tamper V4", price:46.99, was:49.99,
+   size:"Choose 51mm", note:"The \"packer thing.\" Presses the grounds evenly every time. Get the 51mm size to fit the CM5418.",
+   img:"img/normcore.jpg", url:"https://normcorewares.com/products/normcore-spring-loaded-tamper-v4"},
+  {id:"pitcher", who:"extra", group:"coffee", brand:"CASABREWS", name:"SilkPour Stainless Milk Pitcher", price:9.99,
+   size:"12 oz", note:"The machine doesn't come with a milk jug, so this is needed for lattes.",
+   img:"img/pitcher.webp", url:"https://www.casabrews.com/products/milk-frothing-pitcher-casmp350%E2%84%A2"},
+
+  // ---- Any from Peter Millar ----
+  {id:"pm_anypolo", who:"both", group:"any", brand:"Peter Millar", name:"Any Peter Millar Polo (Classic Fit)", price:null,
+   size:"M · Classic Fit · any color", note:"Any polo from this page works. Most are about $105 to $135.",
+   img:"img/pm_polo.webp", url:"https://www.petermillar.com/c/men/tops/polos-shirts?prefn1=plpFitFilter&prefv1=Classic+Fit"},
+  {id:"pm_anylayer", who:"both", group:"any", brand:"Peter Millar", name:"Any Peter Millar Vest, Quarter-Zip or Hoodie", price:null,
+   size:"M · any color", note:"Any vest, quarter-zip or hoodie works. Quarter-zips start around $145.",
+   img:"img/pm_perth.webp", url:"https://www.petermillar.com/c/men/tops/pullovers"},
+
+  // ---- Similar picks ----
+  {id:"aim", who:"mom", alt:1, group:"similar", brand:"lululemon", name:"Always In Motion Boxer 5\"", price:24, was:34,
+   size:"Size M", note:"Alternative to the SKIMS brief. Not counted in the total.",
+   img:"img/lu_aim.webp", url:"https://shop.lululemon.com/p/men-underwear/Aim-Boxer/_/prod9270823"},
+];
+
+const SECTIONS = [
+  {w:"dad", title:"Dad", tot:1},
+  {w:"mom", title:"Mom", tot:1},
+  {w:"extra", title:"Optional coffee extras", sub:"Not on my list and not needed. Anyone can grab these if they want."},
+];
+const ORDER = {list:0, coffee:1, similar:2, any:3};
+
+const store = {
+  get(){ try{ return JSON.parse(localStorage.getItem("mike-gifts")||"{}"); }catch(e){ return {}; } },
+  set(v){ try{ localStorage.setItem("mike-gifts", JSON.stringify(v)); }catch(e){} }
+};
+let got = store.get();
+const money = n => "$" + n.toLocaleString(undefined,{minimumFractionDigits: n%1?2:0, maximumFractionDigits:2});
+
+function card(it){
+  const sw = it.swatches ? `<div class="swatches">${it.swatches.map(s=>`<img src="${s}" alt="" data-sw="${it.id}">`).join("")}</div>` : "";
+  const tagCls = {similar:"tag sim",coffee:"tag cof",brands:"tag br",any:"tag br"}[it.group]||"tag";
+  const tagTxt = {similar:"Similar",coffee:"Coffee",brands:it.brand,any:"Any style"}[it.group]||"My list";
+  return `<div class="card ${got[it.id]?"got":""}" data-id="${it.id}">
+    <div class="img"><span class="${tagCls}">${tagTxt}</span><img id="im-${it.id}" src="${it.img}" alt="${it.name}">${sw}</div>
+    <div class="body">
+      ${it.brand?`<div class="brand">${it.brand}</div>`:""}
+      <div class="name">${it.name}</div>
+      <div class="size">${it.size}</div>
+      <div class="note">${it.note}</div>
+      <div class="foot">
+        <div class="price">${it.price==null?'<span style="font:400 13px Inter;color:var(--muted)">Price varies</span>':money(it.price)}${it.was?`<s>${money(it.was)}</s>`:""}</div>
+        ${it.url?`<a class="shop" href="${it.url}" target="_blank" rel="noopener">Shop ↗</a>`:""}
+      </div>
+    </div>
+  </div>`;
+}
+
+function render(){
+  const out = document.getElementById("out");
+  let html = "";
+  const sum = arr => arr.filter(i=>!i.alt).reduce((a,b)=>a+(b.price||0),0);
+  for(const s of SECTIONS){
+    const list = ITEMS.filter(it => it.who===s.w || (s.tot && it.who==="both")).map(it => it.who==="both" ? {...it, id: it.id+"_"+s.w} : it).sort((a,b)=>ORDER[a.group]-ORDER[b.group]);
+    const sub = s.sub || "";
+    html += `<div class="section"><h2>${s.title}</h2><span>${sub}</span></div><div class="grid">${list.map(card).join("")}</div>`;
+  }
+  out.innerHTML = html;
+}
+
+document.addEventListener("click", e=>{
+  const sw = e.target.closest("[data-sw]");
+  if(sw){ document.getElementById("im-"+sw.dataset.sw).src = sw.getAttribute("src"); }
+});
+render();
+</script>
+</body>
+</html>
