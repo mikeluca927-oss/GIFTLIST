@@ -17,6 +17,7 @@
   header{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-end;justify-content:space-between;margin-bottom:22px}
   h1{font-family:Fraunces,Georgia,serif;font-weight:700;font-size:40px;letter-spacing:-.5px;margin:0}
   .intro{margin-top:14px;max-width:620px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;font-size:15px;line-height:1.5}
+  .intro a{color:var(--accent);font-weight:600}
   .intro p{margin:0 0 8px}.intro p:last-child{margin:0}
   .sub{color:var(--muted);margin-top:6px;max-width:560px}
   .tally{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;min-width:250px}
@@ -67,6 +68,7 @@
       <div class="intro">
         <p>These are all just suggestions of things I'd want. Most of them come in multiple colors and I'm good with any color. I mostly wear black, navy, grey and white, but yk.</p>
         <p><b>Brands I like:</b> lululemon, Vuori, Peter Millar, johnnie-O, Charles Tyrwhitt, Buck Mason, Beckett Simonon, Oliver Cabell, Rhone, SKIMS and Nike.</p>
+        <p>Also really like the <a href="https://olivercabell.com/collections/low-1" target="_blank" rel="noopener">Oliver Cabell Low 1</a>, pretty much any color (whole sizes only, so 9 or 10).</p>
         <p>I don't expect anything, yk.</p>
       </div>
       <div class="sub">Tap <b>Shop</b> to open the product page.</div>
@@ -83,9 +85,6 @@
 <script>
 
 const ITEMS = [
-  {id:"oc_low1", who:"top", group:"list", brand:"Oliver Cabell", name:"Low 1 Sneaker", price:179.99,
-   size:"Pretty much any color · whole sizes only, pick 9 or 10", note:"Most colors are $180 to $225.",
-   img:"img/oc_low1.webp", url:"https://olivercabell.com/collections/low-1"},
   // ---- From the list ----
   {id:"skims", who:"mom", group:"list", brand:"SKIMS", name:"SKIMS Cotton Rib Men's 5\" Boxer Brief", price:24,
    size:"Size M · Onyx", note:"Soft mid-weight cotton boxer brief. Also sold in 3-packs.",
@@ -160,7 +159,6 @@ const ITEMS = [
 ];
 
 const SECTIONS = [
-  {w:"top", title:"Top pick", sub:"Either one can get these"},
   {w:"dad", title:"Dad", tot:1},
   {w:"mom", title:"Mom", tot:1},
   {w:"extra", title:"Optional coffee extras", sub:"Not on my list and not needed. Anyone can grab these if they want."},
