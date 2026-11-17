@@ -160,7 +160,7 @@ const ITEMS = [
 
 const SECTIONS = [
   {w:"dad", title:"Dad", tot:1},
-  {w:"mom", title:"Mom", tot:1, sub:"Peter Millar shows up at TJ Maxx a lot"},
+  {w:"mom", title:"Mom", tot:1},
   {w:"extra", title:"Optional coffee extras", sub:"Not on my list and not needed. Anyone can grab these if they want."},
 ];
 const ORDER = {list:0, coffee:1, similar:2, any:3};
@@ -196,7 +196,7 @@ function render(){
   let html = "";
   const sum = arr => arr.filter(i=>!i.alt).reduce((a,b)=>a+(b.price||0),0);
   for(const s of SECTIONS){
-    const list = ITEMS.filter(it => it.who===s.w || (s.tot && it.who==="both")).map(it => it.who==="both" ? {...it, id: it.id+"_"+s.w} : it).sort((a,b)=>ORDER[a.group]-ORDER[b.group]);
+    const list = ITEMS.filter(it => it.who===s.w || (s.tot && it.who==="both")).map(it => it.who==="both" ? {...it, id: it.id+"_"+s.w, note: (s.w==="mom" && it.brand==="Peter Millar") ? it.note+" You can find Peter Millar at TJ Maxx a lot." : it.note} : it).sort((a,b)=>ORDER[a.group]-ORDER[b.group]);
     const sub = s.sub || "";
     html += `<div class="section"><h2>${s.title}</h2><span>${sub}</span></div><div class="grid">${list.map(card).join("")}</div>`;
   }
